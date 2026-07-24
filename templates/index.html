@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger &mdash; Market Sentiment Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-left">
+    <span class="masthead-mark">§</span>
+    <div>
+      <h1>Ledger</h1>
+      <p class="masthead-sub">Market Sentiment Desk</p>
+    </div>
+  </div>
+  <div id="ticker-tape" class="ticker-tape"><span id="ticker-tape-inner">Track a company to begin reading the tape&hellip;</span></div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <section class="panel">
+      <h2 class="panel-title">Track a company</h2>
+      <form id="track-form">
+        <label>Company name
+          <input type="text" id="input-name" placeholder="e.g. Apple Inc." required>
+        </label>
+        <label>Ticker
+          <input type="text" id="input-ticker" placeholder="e.g. AAPL" required maxlength="8">
+        </label>
+        <button type="submit" id="track-btn">Add to desk</button>
+      </form>
+      <p id="track-status" class="status-line"></p>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title">On the desk</h2>
+      <ul id="company-list" class="company-list">
+        <li class="empty-note">Nothing tracked yet.</li>
+      </ul>
+    </section>
+  </aside>
+
+  <main class="main">
+
+    <section id="empty-state" class="empty-state">
+      <p class="empty-eyebrow">No company selected</p>
+      <h2>Add a ticker on the left to open its sentiment ledger.</h2>
+      <p class="empty-body">Headlines are pulled from financial news, scored positive / neutral / negative, and logged here like entries in a trading floor ledger.</p>
+    </section>
+
+    <div id="dashboard" class="dashboard hidden">
+
+      <section class="hero">
+        <div class="hero-id">
+          <p class="hero-eyebrow" id="hero-ticker">&mdash;</p>
+          <h2 id="hero-name">&mdash;</h2>
+          <p class="hero-source" id="hero-source"></p>
+        </div>
+        <div class="stamp" id="hero-stamp" data-tone="neutral">
+          <span id="hero-stamp-label">NEUTRAL</span>
+        </div>
+        <div class="hero-score">
+          <span class="hero-score-value" id="hero-score">0.00</span>
+          <span class="hero-score-label">compound score</span>
+        </div>
+      </section>
+
+      <section class="panel signal-panel">
+        <div class="signal-top">
+          <div>
+            <h2 class="panel-title">Sentiment-momentum signal</h2>
+            <p class="signal-sub">Rule-based, from headline sentiment only — see disclaimer below.</p>
+          </div>
+          <div class="stamp stamp-lg" id="signal-stamp" data-tone="hold">
+            <span id="signal-stamp-label">HOLD</span>
+          </div>
+        </div>
+        <div class="signal-body">
+          <div class="signal-confidence">
+            <span class="signal-confidence-label">Confidence</span>
+            <div class="confidence-bar"><div class="confidence-bar-fill" id="confidence-fill"></div></div>
+            <span class="signal-confidence-value" id="confidence-value">0%</span>
+          </div>
+          <ul class="signal-reasoning" id="signal-reasoning"></ul>
+        </div>
+        <p class="signal-disclaimer">
+          <strong>Not financial advice.</strong> This signal is generated from news-headline
+          sentiment momentum alone, for demonstration purposes — it ignores price, volume,
+          fundamentals, and risk. Sentiment is a weak, noisy predictor on its own. Do not use
+          this to make real trading decisions.
+        </p>
+      </section>
+
+      <section class="cards">
+        <div class="card" data-tone="positive">
+          <p class="card-label">Positive</p>
+          <p class="card-value" id="count-positive">0</p>
+          <p class="card-pct" id="pct-positive">0%</p>
+        </div>
+        <div class="card" data-tone="neutral">
+          <p class="card-label">Neutral</p>
+          <p class="card-value" id="count-neutral">0</p>
+          <p class="card-pct" id="pct-neutral">0%</p>
+        </div>
+        <div class="card" data-tone="negative">
+          <p class="card-label">Negative</p>
+          <p class="card-value" id="count-negative">0</p>
+          <p class="card-pct" id="pct-negative">0%</p>
+        </div>
+      </section>
+
+      <section class="charts">
+        <div class="panel chart-panel">
+          <h2 class="panel-title">Sentiment trend</h2>
+          <canvas id="trend-chart" height="140"></canvas>
+        </div>
+        <div class="panel chart-panel chart-panel-small">
+          <h2 class="panel-title">Distribution</h2>
+          <canvas id="donut-chart" height="140"></canvas>
+        </div>
+      </section>
+
+      <section class="panel feed-panel">
+        <div class="feed-header">
+          <h2 class="panel-title">Headline feed</h2>
+          <button id="refresh-btn" class="ghost-btn">Refresh</button>
+        </div>
+        <ul id="headline-feed" class="headline-feed"></ul>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
