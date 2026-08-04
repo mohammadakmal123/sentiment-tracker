@@ -1,5 +1,12 @@
 # Ledger — AI-Based Stock Market Sentiment Tracker
 
+![Dashboard overview](LEDGER.png)
+
+![Signal panel detail](ledger-2.png)
+
+**🔗 Live demo:** https://sentiment-tracker-stsj.onrender.com  
+*(Free hosting — first load may take 30–50 seconds if the app has been idle.)*
+
 A working prototype for **D2-PS2**: collects financial news headlines for a
 company/ticker, classifies each one as **positive / negative / neutral**,
 and visualizes sentiment trends on a dashboard.
